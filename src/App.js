@@ -17,20 +17,29 @@ export default function () {
     const [selectedDeviceId, setSelectedDeviceId] = useState("");
     const [text, setText] = useState("");
     const [error, setError] = useState("");
-    const [scanning, setScanning] =useState(false);
+    const [scanning, setScanning] = useState(false);
 
     const pdf417Reader = new BrowserPDF417Reader();
 
-    useEffect(() => {
+
+    const getCameras = async () => {
+        await navigator.mediaDevices.getUserMedia({video: true});
+
         BrowserCodeReader
             .listVideoInputDevices()
             .then(devices => {
                 console.log('List camera:', devices);
                 setVideoInputDevices(devices);
+
             })
             .catch(err => {
                 console.error(err);
             });
+    }
+
+
+    useEffect(() => {
+        getCameras()
     }, []);
 
 
@@ -51,7 +60,7 @@ export default function () {
         })
     }
 
-    function decodeContinuously () {
+    function decodeContinuously() {
         pdf417Reader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
             if (result) {
                 console.log(result)
@@ -65,36 +74,39 @@ export default function () {
 
 
     const startScanning = () => {
-        if(selectedDeviceId)
-        {
+        if (selectedDeviceId) {
             console.log(`Started decode from camera with id ${ selectedDeviceId }`);
             decodeOnce()
         }
     }
 
-    return (<Space direction={ "vertical" } size={ 20 } style={{display: 'flex', justifyContent: 'center', alignItems:' center', marginTop:30}}>
+    return (<Space direction={ "vertical" } size={ 20 }
+                   style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
         <h1>PDF417 Scanner demo (zxing)</h1>
         <div>Use <a href="https://barcode.tec-it.com/en/PDF417" target={ "_blank" }>THIS LINK</a> to generate barcode
             for testing
         </div>
 
-       <div>
-           <div>Select camera:</div>
-           <Select value={selectedDeviceId} style={{width: 240}} onChange={value => setSelectedDeviceId(value)}>
-               {
-                   videoInputDevices.map(element => (
-                       <Option key={element.deviceId} value={element.deviceId}>{element.label}</Option>
-                   ))
-               }
-           </Select>
-       </div>
-        <Space size={20}>
+        <div>
+            <div>Select camera:</div>
+            <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => setSelectedDeviceId(value) }>
+                {
+                    videoInputDevices.map(element => (
+                        <Option key={ element.deviceId } value={ element.deviceId }>{ element.label }</Option>
+                    ))
+                }
+            </Select>
+        </div>
+        <Space size={ 20 }>
 
-            <Button type={ "primary" } onClick={ startScanning } disabled={!selectedDeviceId}> Scan barcode</Button>
-            <Button onClick={() => resetClick() }> Reset </Button>
+            <Button type={ "primary" } onClick={ startScanning } disabled={ !selectedDeviceId }> Scan barcode</Button>
+            <Button onClick={ () => resetClick() }> Reset </Button>
         </Space>
-        { error && <div>Error: <br />{ error }</div> }
-        { selectedDeviceId && <video id="video" height={ 400 } /> }
-    </Space>)
+        <input type="file" accept="video/*" capture="camera"/   >
+
+            { error && <div>Error: <br />{ error }</div> }
+            { selectedDeviceId && <video id="video" height={ 400 } /> }
+    </Space>
+)
 
 }
