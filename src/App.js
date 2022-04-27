@@ -7,7 +7,7 @@ import {
     BrowserCodeReader
 } from "@zxing/browser";
 
-import { NotFoundException } from "@zxing/library";
+import { isSafari } from "react-device-detect";
 
 const {Option} = Select;
 
@@ -17,23 +17,41 @@ export default function () {
     const [selectedDeviceId, setSelectedDeviceId] = useState("");
     const [text, setText] = useState("");
     const [error, setError] = useState("");
-    const [scanning, setScanning] = useState(false);
 
     const pdf417Reader = new BrowserPDF417Reader();
 
 
+    const checkCameraPermission = async () => {
+        let isCameraPermissionGranted = false;
+        if (isSafari) {
+          await  navigator.mediaDevices.enumerateDevices().then(devices => {
+                isCameraPermissionGranted = !!devices.find(device => device.kind === 'videoinput' && device.deviceId !== '');
+                console.log('nó nè', devices.find(device => device.kind === 'videoinput' && device.deviceId !== ''));
+            })
+        } else {
+            const cameraPermission = await navigator.permissions.query({name: "camera"});
+
+            if (cameraPermission.state === "granted") {
+                isCameraPermissionGranted = true;
+            }
+        }
+        console.log({isCameraPermissionGranted})
+        return isCameraPermissionGranted;
+    }
     const getCameras = async () => {
 
-        const cameraPermission = await navigator.permissions.query({name: "camera"});
-        if (cameraPermission.state !== "granted") {
-            const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        const isCameraPermissionGranted = await checkCameraPermission();
+        if(!isCameraPermissionGranted)
+        {
+            await navigator.mediaDevices.getUserMedia({video: true});
         }
         BrowserCodeReader
             .listVideoInputDevices()
             .then(devices => {
-                console.log('List camera:', devices);
                 setVideoInputDevices(devices);
-
+                let backCamera = devices.find(device => device.label.includes('back'));
+                const selectCamera = backCamera || devices?.[devices?.length - 1];
+                setSelectedDeviceId(selectCamera?.deviceId);
             })
             .catch(err => {
                 console.error(err);
@@ -63,18 +81,6 @@ export default function () {
         })
     }
 
-    function decodeContinuously() {
-        pdf417Reader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
-            if (result) {
-                console.log(result)
-
-            }
-            if (err && !(err instanceof NotFoundException)) {
-                console.error(err)
-            }
-        })
-    }
-
 
     const startScanning = () => {
         if (selectedDeviceId) {
@@ -90,26 +96,23 @@ export default function () {
             for testing
         </div>
 
-        <div>
-            <div>Select camera:</div>
-            <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => setSelectedDeviceId(value) }>
-                {
-                    videoInputDevices.map(element => (
-                        <Option key={ element.deviceId } value={ element.deviceId }>{ element.label }</Option>
-                    ))
-                }
-            </Select>
-        </div>
+        {/*<div>*/}
+        {/*    <div>Select camera:</div>*/}
+        {/*    <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => setSelectedDeviceId(value) }>*/}
+        {/*        {*/}
+        {/*            videoInputDevices.map(element => (*/}
+        {/*                <Option key={ element.deviceId } value={ element.deviceId }>{ element.label }</Option>*/}
+        {/*            ))*/}
+        {/*        }*/}
+        {/*    </Select>*/}
+        {/*</div>*/}
         <Space size={ 20 }>
 
             <Button type={ "primary" } onClick={ startScanning } disabled={ !selectedDeviceId }> Scan barcode</Button>
-            <Button onClick={ () => resetClick() }> Reset </Button>
+            {/*<Button onClick={ () => resetClick() }> Reset </Button>*/}
         </Space>
-        <input type="file" accept="video/*" capture="camera"/   >
-
-            { error && <div>Error: <br />{ error }</div> }
-            { selectedDeviceId && <video id="video" height={ 400 } /> }
-    </Space>
-)
+        { error && <div>Error: <br />{ error }</div> }
+        { selectedDeviceId && <video id="video" height={ 400 } /> }
+    </Space>);
 
 }
