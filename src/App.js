@@ -23,8 +23,11 @@ export default function () {
 
 
     const getCameras = async () => {
-        await navigator.mediaDevices.getUserMedia({video: true});
 
+        const cameraPermission = await navigator.permissions.query({name: "camera"});
+        if (cameraPermission.state !== "granted") {
+            const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        }
         BrowserCodeReader
             .listVideoInputDevices()
             .then(devices => {

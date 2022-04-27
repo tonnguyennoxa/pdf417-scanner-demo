@@ -19,3 +19,4 @@ yarn-error.log
 packages/*/yarn.lock
 .env.js
 .idea
+build
