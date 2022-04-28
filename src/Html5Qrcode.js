@@ -8,8 +8,7 @@ const {Option} = Select;
 
 const config = {
     fps: 10,
-    qrbox: {width: 320, height: 100},
-    formatsToSupport: [Html5QrcodeSupportedFormats.PDF_417, Html5QrcodeSupportedFormats.CODE_128]
+    qrbox: {width: 320, height: 200},
 };
 
 
