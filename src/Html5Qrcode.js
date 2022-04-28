@@ -12,7 +12,7 @@ const config = {
 
 
 
-export default function () {
+const Html5QrCode=  () =>  {
     let [scanner, setScanner] = useState();
 
     function onScanSuccess(decodedText, decodedResult) {
@@ -32,7 +32,7 @@ export default function () {
     return (<Space direction={ "vertical" } size={ 20 }
                    style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
         <h1>PDF417 Scanner demo (html5-qrcode)</h1>
-        <div>Use <a href="https://barcode.tec-it.com/en/PDF417" target={ "_blank" }>THIS LINK</a> to generate barcode
+        <div>Use <a href="https://barcode.tec-it.com/en/PDF417"  rel="noreferrer" target={ "_blank" }>THIS LINK</a> to generate barcode
             for testing
         </div>
 
@@ -46,3 +46,5 @@ export default function () {
     </Space>)
 
 }
+
+export default Html5QrCode;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Select, Space } from "antd";
+import { Button, Space } from "antd";
 import './App.css';
 
 import {
@@ -9,16 +9,15 @@ import {
 
 import { isSafari } from "react-device-detect";
 
-const {Option} = Select;
 
-export default function () {
+const  Zxing = () => {
 
-    const [videoInputDevices, setVideoInputDevices] = useState([]);
+    const [setVideoInputDevices] = useState([]);
     const [selectedDeviceId, setSelectedDeviceId] = useState("");
-    const [text, setText] = useState("");
-    const [error, setError] = useState("");
+
 
     const pdf417Reader = new BrowserPDF417Reader();
+
 
 
     const checkCameraPermission = async () => {
@@ -38,7 +37,6 @@ export default function () {
         return isCameraPermissionGranted;
     }
     const getCameras = async () => {
-
         const isCameraPermissionGranted = await checkCameraPermission();
         if(!isCameraPermissionGranted)
         {
@@ -59,15 +57,11 @@ export default function () {
 
 
     useEffect(() => {
-        getCameras()
+        // eslint-disable-next-line
+        // getCameras()
     }, []);
 
 
-    function resetClick() {
-        setText("");
-        setError("");
-        setSelectedDeviceId("");
-    }
 
 
     function decodeOnce() {
@@ -90,7 +84,7 @@ export default function () {
     return (<Space direction={ "vertical" } size={ 20 }
                    style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
         <h1>PDF417 Scanner demo (zxing)</h1>
-        <div>Use <a href="https://barcode.tec-it.com/en/PDF417" target={ "_blank" }>THIS LINK</a> to generate barcode
+        <div>Use <a href="https://barcode.tec-it.com/en/PDF417" target={ "_blank" } rel="noreferrer"  >THIS LINK</a> to generate barcode
             for testing
         </div>
 
@@ -109,8 +103,9 @@ export default function () {
             <Button type={ "primary" } onClick={ startScanning } disabled={ !selectedDeviceId }> Scan barcode</Button>
             {/*<Button onClick={ () => resetClick() }> Reset </Button>*/}
         </Space>
-        { error && <div>Error: <br />{ error }</div> }
         { selectedDeviceId && <video id="video" height={ 400 } /> }
     </Space>);
 
 }
+
+export default Zxing;
