@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Button, Select, Space, Input } from "antd";
+import { Button, Space, Input } from "antd";
 import './App.css';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode"
+import { Html5Qrcode } from "html5-qrcode"
 
-const {Option} = Select;
 
 
 const config = {
@@ -12,11 +11,6 @@ const config = {
 };
 
 
-function onScanFailure(error) {
-    // handle scan failure, usually better to ignore and keep scanning.
-    // for example:
-    console.warn(`Code scan error = ${ error }`);
-}
 
 export default function () {
     let [scanner, setScanner] = useState();

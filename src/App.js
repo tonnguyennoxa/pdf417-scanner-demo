@@ -3,7 +3,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
 } from "react-router-dom";
 import Zxing from "./Zxing";
 import Html5Qrcode from "./Html5Qrcode";
