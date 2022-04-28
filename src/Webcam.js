@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button, Space, Input } from "antd";
 import './App.css';
-import { Html5Qrcode } from "html5-qrcode"
 import Webcam from "react-webcam";
 
 
@@ -27,6 +26,11 @@ const WebcamView = () => {
     return (<Space direction={ "vertical" } size={ 20 }
                    style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
         <div>webcam nè</div>
+        <div style={{display:'flex', flexDirection: 'column'}}>
+            <Webcam height={400} width={300} audio={false} videoConstraints={videoConstraints} />
+            default
+            <br/> =======================================
+        </div>
         {devices.map((device, key) =>{
             console.log('device', device);
             return( (
