@@ -25,7 +25,7 @@ export default function App() {
                 {/*        </li>*/ }
                 {/*    </ul>*/ }
                 {/*</nav>*/ }
-
+                <div id="reader" width="300px" style={ {marginTop: 30} }></div>
                 <Switch>
                     <Route path="/zxing">
                         <Zxing />
@@ -42,7 +42,7 @@ export default function App() {
                     </Route>
 
                 </Switch>
-                <div id="reader" width="300px" style={ {marginTop: 30} }></div>
+
             </div>
         </Router>
     );

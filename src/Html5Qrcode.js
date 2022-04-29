@@ -20,7 +20,7 @@ const videoConstraints = {
 };
 
 const config = {
-    fps: 60,
+    fps: 90,
     qrbox: qrboxFunction,
     videoConstraints,
     formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128]
@@ -52,7 +52,7 @@ const Html5QrCode = () => {
             for testing
         </div>
 
-        <Input value={ text } placeholder={ "Click button bellow" } />
+        <Input value={ text } placeholder={ "Scan result here" } style={{minWidth: 240}} />
 
         <Button type={ "primary" } onClick={ () => {
             setText("")
