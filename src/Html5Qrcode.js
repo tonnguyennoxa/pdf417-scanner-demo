@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Space, Input } from "antd";
 import './App.css';
-import { Html5Qrcode } from "html5-qrcode"
+import { Html5Qrcode,Html5QrcodeSupportedFormats } from "html5-qrcode"
 
 
 let qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
@@ -20,9 +20,10 @@ const videoConstraints = {
 };
 
 const config = {
-    fps: 30,
+    fps: 60,
     qrbox: qrboxFunction,
     videoConstraints,
+    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128]
 };
 
 
