@@ -16,7 +16,7 @@ let qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
 const videoConstraints = {
     width: 1280,
     height: 720,
-    facingMode: "user"
+    facingMode: "environment",
 };
 
 const config = {
@@ -55,7 +55,7 @@ const Html5QrCode = () => {
 
         <Button type={ "primary" } onClick={ () => {
             setText("")
-            scanner.start({facingMode: "environment"}, config, onScanSuccess);
+            scanner.start({}, config, onScanSuccess);
         } }> Scan barcode</Button>
 
     </Space>)
