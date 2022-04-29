@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Button, Space, Input } from "antd";
+import { Button, Space, Input, Select } from "antd";
 import './App.css';
-import { Html5Qrcode,Html5QrcodeSupportedFormats } from "html5-qrcode"
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode"
+import { isAndroid } from "react-device-detect";
 
-
-let qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+const {Option} = Select;
+let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     let minEdgePercentage = 0.8; // 70%
     let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
     let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
     return {
         width: qrboxSize,
-        height: qrboxSize/2,
+        height: qrboxSize / 2,
     };
 }
 const videoConstraints = {
-    width: 1280,
-    height: 720,
+    width: 4000,
+    height: 3000,
     facingMode: "environment",
 };
 
 const config = {
-    fps: 90,
+    fps: 60,
     qrbox: qrboxFunction,
     videoConstraints,
-    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128]
+    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417]
 };
 
 
 const Html5QrCode = () => {
     let [scanner, setScanner] = useState();
+    const [devices, setDevices] = useState([]);
+    const [selectedDeviceId, setSelectedDeviceId] = useState("");
 
     function onScanSuccess(decodedText, decodedResult) {
         // handle the scanned code as you like, for example:
@@ -44,22 +47,57 @@ const Html5QrCode = () => {
         setScanner(html5QrCode)
     }, []);
 
-    return (<Space direction={ "vertical" } size={ 20 }
-                   style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
-        <h1>PDF417 Scanner demo (html5-qrcode)</h1>
-        <div>Use <a href="https://barcode.tec-it.com/en/PDF417" rel="noreferrer" target={ "_blank" }>THIS LINK</a> to
-            generate barcode
-            for testing
-        </div>
+    useEffect(() => {
+        Html5Qrcode.getCameras().then(devices => {
+            /**
+             * devices would be an array of objects of type:
+             * { id: "id", label: "label" }
+             */
+            if (devices && devices.length) {
+                setDevices(devices)
+            }
+        }).catch(err => {
+            // handle err
+        });
+    }, [])
 
-        <Input value={ text } placeholder={ "Scan result here" } style={{minWidth: 240}} />
 
+
+return (<Space direction={ "vertical" } size={ 20 }
+               style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
+    <h1>PDF417 Scanner demo (html5-qrcode)</h1>
+    <div>Use <a href="https://barcode.tec-it.com/en/PDF417" rel="noreferrer" target={ "_blank" }>THIS LINK</a> to
+        generate barcode
+        for testing
+    </div>
+
+    <Input value={ text } placeholder={ "Scan result here" } style={ {minWidth: 240} } />
+    {isAndroid &&  <div>
+        <div>Select camera:</div>
+        <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => {
+            setSelectedDeviceId(value);
+            scanner?.start({ deviceId: { exact: value} }, config, onScanSuccess);
+        } }>
+            {
+                devices.map(element => (
+                    <Option key={ element.id } value={ element.id }>{ element.label }</Option>
+                ))
+            }
+        </Select>
+    </div> }
+    <Space>
         <Button type={ "primary" } onClick={ () => {
             setText("")
             scanner.start({}, config, onScanSuccess);
+
         } }> Scan barcode</Button>
 
-    </Space>)
+        <Button onClick={ () => {
+            scanner?.stop();
+        } }> Stop scanning</Button>
+    </Space>
+
+</Space>)
 
 }
 

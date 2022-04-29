@@ -88,16 +88,7 @@ const  Zxing = () => {
             for testing
         </div>
 
-        {/*<div>*/}
-        {/*    <div>Select camera:</div>*/}
-        {/*    <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => setSelectedDeviceId(value) }>*/}
-        {/*        {*/}
-        {/*            videoInputDevices.map(element => (*/}
-        {/*                <Option key={ element.deviceId } value={ element.deviceId }>{ element.label }</Option>*/}
-        {/*            ))*/}
-        {/*        }*/}
-        {/*    </Select>*/}
-        {/*</div>*/}
+
         <Space size={ 20 }>
 
             <Button type={ "primary" } onClick={ startScanning } disabled={ !selectedDeviceId }> Scan barcode</Button>
