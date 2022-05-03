@@ -30,8 +30,8 @@ const config = {
 
 const Html5QrCode = () => {
     let [scanner, setScanner] = useState();
-    const [devices, setDevices] = useState([]);
-    const [selectedDeviceId, setSelectedDeviceId] = useState("");
+    const [backCameras, setBackCameras] = useState([]);
+    const [selectedCameraId, setSelectedCameraId] = useState("");
 
     function onScanSuccess(decodedText, decodedResult) {
         // handle the scanned code as you like, for example:
@@ -48,13 +48,13 @@ const Html5QrCode = () => {
     }, []);
 
     useEffect(() => {
-        Html5Qrcode.getCameras().then(devices => {
+        Html5Qrcode.getCameras().then(cameras => {
             /**
              * devices would be an array of objects of type:
              * { id: "id", label: "label" }
              */
-            if (devices && devices.length) {
-                setDevices(devices)
+            if (cameras && cameras.length) {
+                setBackCameras(cameras.filter(camera => camera.label?.includes('back')))
             }
         }).catch(err => {
             // handle err
@@ -62,42 +62,41 @@ const Html5QrCode = () => {
     }, [])
 
 
+    return (<Space direction={ "vertical" } size={ 20 }
+                   style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
+        <h1>PDF417 Scanner demo (html5-qrcode)</h1>
+        <div>Use <a href="https://barcode.tec-it.com/en/PDF417" rel="noreferrer" target={ "_blank" }>THIS LINK</a> to
+            generate barcode
+            for testing
+        </div>
 
-return (<Space direction={ "vertical" } size={ 20 }
-               style={ {display: 'flex', justifyContent: 'center', alignItems: ' center', marginTop: 30} }>
-    <h1>PDF417 Scanner demo (html5-qrcode)</h1>
-    <div>Use <a href="https://barcode.tec-it.com/en/PDF417" rel="noreferrer" target={ "_blank" }>THIS LINK</a> to
-        generate barcode
-        for testing
-    </div>
+        <Input value={ text } placeholder={ "Scan result here" } style={ {minWidth: 240} } />
+        { backCameras?.length > 1 && <div>
+            <div>Select camera:</div>
+            <Select value={ selectedCameraId } style={ {width: 240} } onChange={ value => {
+                setSelectedCameraId(value);
+                scanner?.start({deviceId: {exact: value}}, config, onScanSuccess);
+            } }>
+                {
+                    backCameras.map(element => (
+                        <Option key={ element.id } value={ element.id }>{ element.label }</Option>
+                    ))
+                }
+            </Select>
+        </div> }
+        <Space>
+            <Button type={ "primary" } onClick={ () => {
+                setText("")
+                scanner.start({}, config, onScanSuccess);
 
-    <Input value={ text } placeholder={ "Scan result here" } style={ {minWidth: 240} } />
-    {isAndroid &&  <div>
-        <div>Select camera:</div>
-        <Select value={ selectedDeviceId } style={ {width: 240} } onChange={ value => {
-            setSelectedDeviceId(value);
-            scanner?.start({ deviceId: { exact: value} }, config, onScanSuccess);
-        } }>
-            {
-                devices.map(element => (
-                    <Option key={ element.id } value={ element.id }>{ element.label }</Option>
-                ))
-            }
-        </Select>
-    </div> }
-    <Space>
-        <Button type={ "primary" } onClick={ () => {
-            setText("")
-            scanner.start({}, config, onScanSuccess);
+            } }> Scan barcode</Button>
 
-        } }> Scan barcode</Button>
+            <Button onClick={ () => {
+                scanner?.stop();
+            } }> Stop scanning</Button>
+        </Space>
 
-        <Button onClick={ () => {
-            scanner?.stop();
-        } }> Stop scanning</Button>
-    </Space>
-
-</Space>)
+    </Space>)
 
 }
 
