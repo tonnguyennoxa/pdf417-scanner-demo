@@ -53,7 +53,12 @@ const Html5QrCode = () => {
              * { id: "id", label: "label" }
              */
             if (cameras && cameras.length) {
-                setBackCameras(cameras.filter(camera => camera.label?.includes('back')))
+                const backCameras = cameras.filter(camera => camera.label?.includes('back'))
+                setBackCameras(backCameras);
+                if(backCameras.length > 0) {
+                    setSelectedCameraId(backCameras[0].id);
+                }
+
             }
         }).catch(err => {
             // handle err
@@ -87,8 +92,7 @@ const Html5QrCode = () => {
         <Space>
             <Button type={ "primary" } onClick={ () => {
                 setText("")
-                scanner.start({}, config, onScanSuccess);
-
+                scanner.start({deviceId: {exact: selectedCameraId}}, config, onScanSuccess);
             } }> Scan barcode</Button>
 
             <Button onClick={ () => {
