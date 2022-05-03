@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Space, Input, Select } from "antd";
 import './App.css';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode"
-import { isAndroid } from "react-device-detect";
 
 const {Option} = Select;
 let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
@@ -75,6 +74,7 @@ const Html5QrCode = () => {
             <div>Select camera:</div>
             <Select value={ selectedCameraId } style={ {width: 240} } onChange={ value => {
                 setSelectedCameraId(value);
+                scanner?.stop();
                 scanner?.start({deviceId: {exact: value}}, config, onScanSuccess);
             } }>
                 {
