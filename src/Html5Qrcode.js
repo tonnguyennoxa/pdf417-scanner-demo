@@ -20,7 +20,7 @@ const videoConstraints = {
 };
 
 const config = {
-    fps: 60,
+    fps: 120,
     qrbox: qrboxFunction,
     videoConstraints,
     formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417]
