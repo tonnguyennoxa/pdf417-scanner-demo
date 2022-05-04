@@ -10,17 +10,17 @@ let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
     return {
         width: qrboxSize,
-        height: qrboxSize / 2,
+        height: qrboxSize / 3,
     };
 }
 const videoConstraints = {
-    width: 4000,
-    height: 3000,
+    width: 3000,
+    height: 4000,
     facingMode: "environment",
 };
 
 const config = {
-    fps: 120,
+    fps: 60,
     qrbox: qrboxFunction,
     videoConstraints,
     formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417]
