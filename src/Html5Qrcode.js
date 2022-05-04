@@ -14,16 +14,17 @@ let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     };
 }
 const videoConstraints = {
-    width: 3000,
-    height: 4000,
+    width: 1500,
+    height: 2000,
     facingMode: "environment",
+    focusMode: "continuous",
 };
 
 const config = {
-    fps: 90,
+    fps: 120,
     qrbox: qrboxFunction,
     videoConstraints,
-    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417]
+    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417],
 };
 
 
@@ -58,7 +59,6 @@ const Html5QrCode = () => {
                 if(backCameras.length > 0) {
                     setSelectedCameraId(backCameras[0].id);
                 }
-
             }
         }).catch(err => {
             // handle err
