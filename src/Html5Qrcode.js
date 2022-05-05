@@ -5,17 +5,17 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode"
 
 const {Option} = Select;
 let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-    let minEdgePercentage = 0.8; // 70%
+    let minEdgePercentage = 0.9; // 70%
     let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
     let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
     return {
         width: qrboxSize,
-        height: qrboxSize / 3,
+        height: qrboxSize / 2,
     };
 }
 const videoConstraints = {
-    width: 1500,
-    height: 2000,
+    width: 1280,
+    height: 720,
     facingMode: "environment",
     focusMode: "continuous",
 };
