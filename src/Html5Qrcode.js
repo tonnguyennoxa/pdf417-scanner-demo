@@ -14,14 +14,14 @@ let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     };
 }
 const videoConstraints = {
-    width: 1920,
-    height: 1080,
+    width: 1280,
+    height: 720,
     facingMode: "environment",
     focusMode: "continuous",
 };
 
 const config = {
-    fps: 60,
+    fps: 30,
     qrbox: qrboxFunction,
     videoConstraints,
     formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417],
