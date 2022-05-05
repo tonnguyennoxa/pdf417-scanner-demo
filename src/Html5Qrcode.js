@@ -14,8 +14,8 @@ let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     };
 }
 const videoConstraints = {
-    width: 4000,
-    height: 3000,
+    width: 640,
+    height: 480,
     facingMode: "environment",
     focusMode: "continuous",
 };
