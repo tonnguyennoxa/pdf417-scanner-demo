@@ -7,6 +7,7 @@ import {
 import Zxing from "./Zxing";
 import Html5Qrcode from "./Html5Qrcode";
 import Webcam from "./Webcam";
+import Scanner from "./Scanner";
 
 export default function App() {
     return (
@@ -36,8 +37,10 @@ export default function App() {
                     <Route path="/webcam">
                         <Webcam />
                     </Route>
+                    <Route path="/scanner">
+                        <Scanner />
+                    </Route>
                     <Route path="/">
-
                         <Html5Qrcode />
                     </Route>
 
