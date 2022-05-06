@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Space, Input, Select } from "antd";
 import './App.css';
-import { Html5Qrcode, Html5QrcodeSupportedFormats, Html5QrcodeScanner } from "html5-qrcode"
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode"
 
 const {Option} = Select;
 let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
@@ -14,12 +14,17 @@ let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
     };
 }
 const videoConstraints = {
+    width: 1280,
+    height: 720,
     facingMode: "environment",
+    focusMode: "continuous",
 };
 
 const config = {
+    fps: 60,
     qrbox: qrboxFunction,
     videoConstraints,
+    formatsToSupport: [Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.PDF_417],
 };
 
 
